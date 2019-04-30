@@ -7,27 +7,42 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "InputHandler.h"
+#import "AdditionQuestion.h"
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         
-        char inputChar[255];
         
-        fgets(inputChar, 255, stdin);
-        NSString *inputString = [[NSString stringWithCString:inputChar
-                                                    encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet: NSCharacterSet.whitespaceAndNewlineCharacterSet];
-        
-        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-        NSNumber *typedNumber = [formatter numberFromString:inputString];
-        
-        NSInteger number;
-        if(typedNumber == nil){
-            NSLog(@"Wrong number. I cannot convert!");
-           // continue;
-        } else {
-            number = [typedNumber integerValue];
+        BOOL gameON = YES;
+        while (gameON) {
+            
+            AdditionQuestion *question = [[AdditionQuestion alloc] init];
+            NSLog(@"%@", [question question]);
+            NSString *inputString = [InputHandler stringFromInput];
+            
+            if([inputString isEqualToString: @"quit"]){
+                gameON = NO;
+            } else {
+            
+                NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+                NSNumber *typedNumber = [formatter numberFromString:inputString];
+                
+                NSInteger number;
+                if(typedNumber == nil){
+                    NSLog(@"Wrong number. I cannot convert!");
+                     continue;
+                } else {
+                    number = [typedNumber integerValue];
+                    if(number == [question answer]){
+                        NSLog(@"%@", @"Right");
+                    } else {
+                        NSLog(@"%@", @"Wrong");
+                    }
+                }
+            }
         }
-        
+        NSLog(@"%@", @"Bye");
     }
     return 0;
 }
